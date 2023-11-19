@@ -1,0 +1,114 @@
+<header th:fragment="admin_header">
+    <table style="width:100%; background-color: #e7fff3">
+        <tbody>
+        <tr>
+            <td style="text-align: center; font-weight: bold; font-size: larger; width: 100%; border: 1px solid">
+                Страница администратора
+            </td>
+            <td><a class="button" href="/">Главная</a></td>
+            <td><a class="button" href="user">Моя&nbsp;страница</a></td>
+            <td>
+                <form method="get" action="/logout">
+                    <button class="button" type="submit">Выйти</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</header>
+<!--------------------------------------------------------------------------------->
+<table th:fragment="users_list" style="border: 0; margin: auto;">
+    <thead>
+    <tr>
+        <th style="border-bottom: 1px solid; padding: 4px">Имя</th>
+        <th style="border-bottom: 1px solid; padding: 4px">Фамилия</th>
+        <th style="border-bottom: 1px solid; padding: 4px">Е-мэйл</th>
+        <th style="border-bottom: 1px solid; padding: 4px">Главная роль</th>
+        <th style="border-bottom: 1px solid; padding: 4px">Дата рожд.</th>
+        <th style="border-bottom: 1px solid; padding: 4px">Дата, время записи</th>
+        <th style="border-bottom: 1px solid; padding: 4px">Заблокирован</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}"
+        th:with="st = 'border-bottom: 1px solid; color: ' + (${user.isBlocked()} ? 'red' : 'black') +';'">
+        <td th:style="${st}" th:text="${user.firstName != null} ? ${user.firstName} : '-'"></td>
+        <td th:style="${st}" th:text="${user.lastName != null} ? ${user.lastName} : '-'"></td>
+        <td th:style="${st}" th:text="${user.email}"></td>
+        <td th:style="${st}" th:with="roles=${user.roles}">
+            <span th:text="${user.isAdmin()} ? 'администратор' : 'пользователь'"></span>
+        </td>
+        <td th:style="${st} + ' text-align: center'"
+            th:text="${user.birthDate != null} ? ${user.birthDateToString()} : '-'"></td>
+        <td th:style="${st} + ' text-align: center'" th:text="${user.recordDateTimeToString()}"></td>
+        <td style="text-align: center">
+            <form th:action="'admin/change-ban/' + ${user.id}" th:method="post" th:switch="${user.isAdmin()}">
+                <span th:case="false">
+                    <input type="checkbox" class="checkbox" onclick="submit()" th:if="${!user.isBlocked()}">
+                    <input type="checkbox" class="checkbox" onclick="submit()" checked th:if="${user.isBlocked()}">
+                </span>
+                <span th:case="true">
+                    <input type="checkbox" disabled="disabled">
+                </span>
+            </form>
+        </td>
+        <!--        <td th:style="${st} + ' text-align: center'" th:text="${user.isBlocked()} ? 'да' : 'нет'"></td>-->
+        <td style="border: 0; padding: 0 2px; text-align: center">
+            <a th:attr="href='admin/show-edit-user?id=' + ${user.id}" class="button">Редактировать</a>
+        </td>
+        <td style="border: 0; padding: 0 2px; text-align: center">
+            <form th:action="'admin/remove-user/' + ${user.id}" th:method="delete" th:switch="${user.isAdmin()}">
+                <button type="submit" class="button" th:case="false">Удалить</button>
+                <button type="submit" disabled="disabled" th:case="true">Удалить</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<!--------------------------------------------------------------------------------->
+<!--<table th:fragment="admin_edit" style="border: none; margin: auto">-->
+<!--    <thead>-->
+<!--    <tr>-->
+<!--        <th style="padding: 0 5px; text-align: center"><label for="first_name">Имя</label></th>-->
+<!--        <th style="padding: 0 5px; text-align: center"><label for="last_name">Фамилия</label></th>-->
+<!--        <th style="padding: 0 5px; text-align: center"><label for="email">Е-мэйл*</label></th>-->
+<!--        <th style="padding: 0 5px; text-align: center"><label for="password">Пароль*</label></th>-->
+<!--        <th style="padding: 0 5px; text-align: center"><label for="birth_date">Дата рождения</label></th>-->
+<!--        <th style="padding: 0 5px; text-align: center"><label for="blocked">Блокировать</label></th>-->
+<!--        <th></th>-->
+<!--    </tr>-->
+<!--    </thead>-->
+<!--    <tbody>-->
+<!--    <tr style="border: 0">-->
+<!--        <td><input id="first_name" type="text" size="15" th:field="*{firstName}"></td>-->
+<!--        <td><input id="last_name" type="text" size="20" th:field="*{lastName}"></td>-->
+<!--        <td><input id="email" type="text" size="25" required th:field="*{email}"></td>-->
+<!--        <td><input id="password" type="password" size="25" required th:field="*{password}"></td>-->
+<!--        <td><input id="birth_date" type="date" th:field="*{birthDate}"></td>-->
+<!--        <td style="text-align: center"><input id="blocked" type="checkbox" class="checkbox"-->
+<!--                                              th:field="*{blocked}">-->
+<!--        </td>-->
+<!--    </tr>-->
+<!--    </tbody>-->
+<!--</table>-->
+<!--------------------------------------------------------------------------------->
+<header th:fragment="admin_edit_user_header">
+    <table style="width:100%; background-color: #e7fff3">
+        <tbody>
+        <tr>
+            <td style="text-align: center; font-weight: bold; font-size: larger; width: 100%; border: 1px solid">
+                Редактирование пользователя
+            </td>
+            <td><a class="button" href="/">Главная</a></td>
+            <td><a class="button" href="user">Моя&nbsp;страница</a></td>
+            <td>
+                <form method="get" action="/logout">
+                    <button class="button" type="submit">Выйти</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</header>

@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Comments for myself ###
+private_comments/
