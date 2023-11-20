@@ -29,15 +29,14 @@ public class InitDataBase {
             User superAdmin = new User(null, null, "superadmin@kata.ru", "123",
                     null, adminRoles, false);
             userService.saveUser(superAdmin);
+            putInitUsers();
         }
-
-//        initTestUsers();
     }
 
     /**
      * Method puts a few users in the table for testing the application.
      */
-    public void initTestUsers() {
+    public void putInitUsers() {
         Set<Role> userRoleSet1 = Role.getSetOfRoles(1);
         Set<Role> userRoleSet2 = Role.getSetOfRoles(1);
 
@@ -49,5 +48,4 @@ public class InitDataBase {
         userService.saveUser(user1);
         userService.saveUser(user2);
     }
-
 }

@@ -92,11 +92,11 @@ public class AdminControllers {
         return "redirect:/admin";
     }
 
-    // Что возвращать из метода, если нужно остаться на странице без перезагрузки?
+    // Что возвращать из метода, чтобы страница не перезагружалась?
     @PostMapping("/change-ban/{id}")
     public String changeUserBan(@PathVariable long id) {
         User user = userService.getUserById(id);
-        user.setBlocked(!user.isBlocked());
+        user.setLocked(!user.isLocked());
         userService.updateUser(user);
         return "redirect:/admin";
     }

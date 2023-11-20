@@ -2,14 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="/style.css">
     <title>Confirm Log Out?</title>
 </head>
 <body>
-<div style="text-align: center">
-    <form class="form-signin" method="post" action="/logout">
-        <h2 class="form-signin-heading">Are you sure you want to log out?</h2>
-        <button type="submit">Log Out</button>
-    </form>
-</div>
+<table style="margin: auto">
+    <tbody>
+    <tr>
+        <td colspan="2"><h2>Подтверждаете выход?</h2></td>
+    </tr>
+    <tr>
+        <td style="text-align: center">
+            <form method="post" action="/logout">
+                <button type="submit" class="button">Выйти</button>
+            </form>
+        </td>
+        <td style="text-align: center">
+            <input type="button" class="button" onclick="history.back();" value="Отмена">
+        </td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>

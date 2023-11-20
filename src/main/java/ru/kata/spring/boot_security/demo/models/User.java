@@ -35,9 +35,6 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-//    @Transient
-//    private String passwordConf;
-
     @Column(name = "birth_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Calendar birthDate;
@@ -53,17 +50,17 @@ public class User {
     @JoinColumn
     private Set<Role> roles;
 
-    private boolean blocked;
+    private boolean locked;
 
     public User(String firstName, String lastName, String email, String password,
-                Calendar birthDate, Set<Role> roles, boolean blocked) {
+                Calendar birthDate, Set<Role> roles, boolean locked) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.birthDate = birthDate;
         this.roles = roles;
-        this.blocked = blocked;
+        this.locked = locked;
     }
 
     public boolean isAdmin() {

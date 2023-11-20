@@ -9,15 +9,16 @@
 </head>
 <body>
 <div style="padding-top: 100px; text-align: center">
-    <form method="post" th:action="@{/perform-login}">
+    <form method="post" th:action="login">
         <div th:if="${param.error}" style="color: red">Пользователь с такой комбинацией имя-пароль не найден</div>
         <div th:if="${param.logout}">You have been logged out.</div>
+        <p>Вход</p>
         <p>
-            <label for="username">Ваш е-мэйл:</label>
+            <label for="username">е-мэйл:</label>
             <input type="text" id="username" name="username" placeholder="email" size="25" required autofocus>
         </p>
         <p>
-            <label for="password">Ваш пароль:</label>
+            <label for="password">пароль:</label>
             <input type="password" id="password" name="password" placeholder="Password" size="25" required>
         </p>
         <button type="submit" class="button">Войти</button>

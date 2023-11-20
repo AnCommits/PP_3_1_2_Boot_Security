@@ -12,17 +12,17 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 
 @Controller
 @RequestMapping("/guest")
-public class GuestController {
+public class GuestControllers {
     private User user;
     private boolean emailError;
 
     private final UserService userService;
 
-    public GuestController(UserService userService) {
+    public GuestControllers(UserService userService) {
         this.userService = userService;
     }
 
-    @GetMapping("register")
+    @GetMapping("sign-up")
     public String showAddUser(ModelMap model) {
         model.addAttribute("user", new User());
         model.addAttribute("title", "Регистрация пользователя");

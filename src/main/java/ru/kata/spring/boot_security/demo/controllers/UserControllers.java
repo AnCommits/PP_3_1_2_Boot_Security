@@ -62,7 +62,6 @@ public class UserControllers {
     @DeleteMapping("/remove-user/{id}")
     public String removeUser(@PathVariable long id) {
         userService.removeUserById(id);
-        // ToDo logout                        !  +  !  +  !  +  !  +  !
         return "redirect:/";
     }
 }

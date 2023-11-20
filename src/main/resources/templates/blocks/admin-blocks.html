@@ -31,7 +31,7 @@
     </thead>
     <tbody>
     <tr th:each="user : ${users}"
-        th:with="st = 'border-bottom: 1px solid; color: ' + (${user.isBlocked()} ? 'red' : 'black') +';'">
+        th:with="st = 'border-bottom: 1px solid; color: ' + (${user.isLocked()} ? 'red' : 'black') +';'">
         <td th:style="${st}" th:text="${user.firstName != null} ? ${user.firstName} : '-'"></td>
         <td th:style="${st}" th:text="${user.lastName != null} ? ${user.lastName} : '-'"></td>
         <td th:style="${st}" th:text="${user.email}"></td>
@@ -44,8 +44,8 @@
         <td style="text-align: center">
             <form th:action="'admin/change-ban/' + ${user.id}" th:method="post" th:switch="${user.isAdmin()}">
                 <span th:case="false">
-                    <input type="checkbox" class="checkbox" onclick="submit()" th:if="${!user.isBlocked()}">
-                    <input type="checkbox" class="checkbox" onclick="submit()" checked th:if="${user.isBlocked()}">
+                    <input type="checkbox" class="checkbox" onclick="submit()" th:if="${!user.isLocked()}">
+                    <input type="checkbox" class="checkbox" onclick="submit()" checked th:if="${user.isLocked()}">
                 </span>
                 <span th:case="true">
                     <input type="checkbox" disabled="disabled">
@@ -65,21 +65,3 @@
     </tbody>
 </table>
 <!--------------------------------------------------------------------------------->
-<header th:fragment="admin_edit_user_header">
-    <table style="width:100%; background-color: #e7fff3">
-        <tbody>
-        <tr>
-            <td style="text-align: center; font-weight: bold; font-size: larger; width: 100%; border: 1px solid">
-                Редактирование пользователя
-            </td>
-            <td><a class="button" href="/">Главная</a></td>
-            <td><a class="button" href="user">Моя&nbsp;страница</a></td>
-            <td>
-                <form method="get" action="/logout">
-                    <button class="button" type="submit">Выйти</button>
-                </form>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</header>
