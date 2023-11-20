@@ -6,16 +6,13 @@
                 th:text="${title}">
             </td>
             <td><a class="button" href="/">Главная</a></td>
-            <td style="text-align: right">
-                <a href="/logout">Выйти</a>
-<!--                <form method="get" action="/logout">-->
-<!--                    <button class="button" type="submit">Выйти</button>-->
-<!--                </form>-->
-            </td>
             <td>
                 <form th:action="'user/remove-user/' + ${user.id}" th:method="delete">
                     <button type="submit" class="button">Удалить&nbsp;аккаунт</button>
                 </form>
+            </td>
+            <td style="text-align: right">
+                <a href="/logout" class="button">Выйти</a>
             </td>
         </tr>
         </tbody>

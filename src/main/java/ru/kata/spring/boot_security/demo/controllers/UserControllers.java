@@ -10,10 +10,6 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 @Controller
 @RequestMapping("/user")
 public class UserControllers {
-
-    // Как передать объект между контроллерами? @ModelAttribute не работает.
-
-    // Эти поля для передачи между контроллерами
     private User user;
     private boolean emailError;
 
@@ -61,5 +57,12 @@ public class UserControllers {
         user.setRoles(Role.getSetOfRoles(1));
         userService.updateUser(user);
         return "redirect:/user";
+    }
+
+    @DeleteMapping("/remove-user/{id}")
+    public String removeUser(@PathVariable long id) {
+        userService.removeUserById(id);
+        // ToDo logout                        !  +  !  +  !  +  !  +  !
+        return "redirect:/";
     }
 }

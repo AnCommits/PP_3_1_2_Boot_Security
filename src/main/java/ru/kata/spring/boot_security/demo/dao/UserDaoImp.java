@@ -19,33 +19,19 @@ public class UserDaoImp implements UserDao {
 
     @Override
     public void saveUser(User user) {
-//        logger.info(user.getEmail());
+        logger.info(user.toString());
         entityManager.persist(user);
-//        String email = user.getEmail();
-//        User u = getUserByEmail(email);
-//        if (u == null) {
-//            try {
-//                entityManager.persist(user);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
     }
-
-//    @Override
-//    public void saveUsers(List<User> users) {
-//        for (User user : users) {
-//            entityManager.persist(user);
-//        }
-//    }
 
     @Override
     public User getUserById(Long id) {
+        logger.info("id: " + id);
         return entityManager.find(User.class, id);
     }
 
     @Override
     public List<User> getAllUsers() {
+        logger.info("");
         String hql = "FROM User";
         TypedQuery<User> query = entityManager.createQuery(hql, User.class);
         return query.getResultList();
@@ -53,6 +39,7 @@ public class UserDaoImp implements UserDao {
 
     @Override
     public User getUserByEmail(String email) {
+        logger.info(email);
 //        String hql = "SELECT u FROM User u left join fetch u.roles WHERE u.email =:email";
 //        String hql = "SELECT u FROM User u join fetch u.roles WHERE u.email =:email";
         String hql = "SELECT u FROM User u WHERE u.email =:email";
@@ -69,24 +56,21 @@ public class UserDaoImp implements UserDao {
 
     @Override
     public void updateUser(User user) {
+        logger.info(user.toString());
         entityManager.merge(user);
     }
 
     @Override
     public void removeUserById(Long id) {
+        logger.info("id: " + id);
         User user = entityManager.find(User.class, id);
         entityManager.remove(user);
     }
 
-//    @Override
-//    public void removeAllUsers() {
-//        String sql = "truncate table users";
-//        Query query = entityManager.createNativeQuery(sql);
-//        query.executeUpdate();
-//    }
-
     @Override
     public long countUsers() {
+        logger.info("");
+        logger.info("");
         String hql = "SELECT count(u) FROM User u";
         TypedQuery<Long> query = entityManager.createQuery(hql, Long.class);
         return query.getSingleResult();

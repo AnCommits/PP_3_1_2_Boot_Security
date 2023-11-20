@@ -27,13 +27,6 @@ public class UserServiceImp implements UserService {
         }
     }
 
-//    @Transactional
-//    @Override
-//    public void saveUsers(List<User> users) {
-//        users.forEach(u -> u.setRecordDateTime(new Date()));
-//        userDao.saveUsers(users);
-//    }
-
     @Override
     public User getUserById(Long id) {
         return userDao.getUserById(id);
@@ -63,12 +56,6 @@ public class UserServiceImp implements UserService {
     public void removeUserById(Long id) {
         userDao.removeUserById(id);
     }
-
-//    @Transactional
-//    @Override
-//    public void removeAllUsers() {
-//        userDao.removeAllUsers();
-//    }
 
     @Override
     public long countUsers() {

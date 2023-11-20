@@ -13,10 +13,6 @@ import java.util.Set;
 @Controller
 @RequestMapping("/admin")
 public class AdminControllers {
-
-    // Как передать объект между контроллерами? @ModelAttribute не работает.
-
-    // Эти поля для передачи между контроллерами
     private User user;
     private Set<Role> roles;
     private boolean emailError;

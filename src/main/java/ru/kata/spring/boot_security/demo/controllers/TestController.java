@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
+import java.security.Principal;
+
 @Controller
 public class TestController {
     private final UserService userService;
@@ -15,9 +17,8 @@ public class TestController {
     }
 
     @GetMapping("/test")
-    public String test() {
-//        String name = principal.getName();
-//        System.out.println(name);
+    public String test(Principal principal) {
+        String name = principal.getName();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return "test";
     }

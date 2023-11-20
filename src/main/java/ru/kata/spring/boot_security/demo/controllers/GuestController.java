@@ -13,10 +13,6 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 @Controller
 @RequestMapping("/guest")
 public class GuestController {
-
-    // Как передать объект между контроллерами? @ModelAttribute не работает.
-
-    // Эти поля для передачи между контроллерами
     private User user;
     private boolean emailError;
 

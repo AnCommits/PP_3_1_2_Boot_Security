@@ -8,8 +8,6 @@ public interface UserDao {
 
     void saveUser(User user);
 
-//    void saveUsers(List<User> users);
-
     User getUserById(Long id);
 
     List<User> getAllUsers();
@@ -19,8 +17,6 @@ public interface UserDao {
     void updateUser(User user);
 
     void removeUserById(Long id);
-
-//    void removeAllUsers();
 
     long countUsers();
 }
