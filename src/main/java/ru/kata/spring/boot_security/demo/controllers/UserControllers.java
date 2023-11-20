@@ -16,7 +16,6 @@ public class UserControllers {
     // Эти поля для передачи между контроллерами
     private User user;
     private boolean emailError;
-    private boolean passwordsDiffrent;
 
     private final UserService userService;
 
@@ -46,7 +45,6 @@ public class UserControllers {
         model.addAttribute("title", "Моя страница");
         model.addAttribute("title2", "Редактирование моих данных");
         model.addAttribute("email_err", emailError);
-        model.addAttribute("passwords_diff", passwordsDiffrent);
         return "user-edit";
     }
 
@@ -56,9 +54,8 @@ public class UserControllers {
         String email = user.getEmail();
         User userFromDb = userService.getUserByEmail(email);
         emailError = userFromDb != null && id != userFromDb.getId();
-        passwordsDiffrent = !user.getPassword().equals(user.getPasswordConf());
         this.user = user;
-        if (emailError || passwordsDiffrent) {
+        if (emailError) {
             return "redirect:/user/show-repeat-edit-user";
         }
         user.setRoles(Role.getSetOfRoles(1));

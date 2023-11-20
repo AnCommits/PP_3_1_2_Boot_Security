@@ -20,7 +20,6 @@ public class AdminControllers {
     private User user;
     private Set<Role> roles;
     private boolean emailError;
-    private boolean passwordsDiffrent;
 
     private final UserService userService;
 
@@ -52,7 +51,6 @@ public class AdminControllers {
         model.addAttribute("title", "Страница администратора");
         model.addAttribute("title2", "Редактирование пользователя");
         model.addAttribute("email_err", emailError);
-        model.addAttribute("passwords_diff", passwordsDiffrent);
         return "user-edit";
     }
 
@@ -70,7 +68,6 @@ public class AdminControllers {
         model.addAttribute("title", "Страница администратора");
         model.addAttribute("title2", "Новый пользователь");
         model.addAttribute("email_err", emailError);
-        model.addAttribute("passwords_diff", passwordsDiffrent);
         return "user-edit";
     }
 
@@ -80,17 +77,16 @@ public class AdminControllers {
         String email = user.getEmail();
         User userFromDb = userService.getUserByEmail(email);
         emailError = userFromDb != null && id != userFromDb.getId();
-        passwordsDiffrent = !user.getPassword().equals(user.getPasswordConf());
         this.user = user;
         if (id == 0) {      // new user
-            if (emailError || passwordsDiffrent) {
+            if (emailError) {
                 return "redirect:/admin/show-repeat-add-user";
             } else {
                 user.setRoles(roles);
                 userService.saveUser(user);
             }
         } else {            // edit user
-            if (emailError || passwordsDiffrent) {
+            if (emailError) {
                 return "redirect:/admin/show-repeat-edit-user";
             } else {
                 user.setRoles(roles);

@@ -19,7 +19,6 @@ public class GuestController {
     // Эти поля для передачи между контроллерами
     private User user;
     private boolean emailError;
-    private boolean passwordsDiffrent;
 
     private final UserService userService;
 
@@ -41,7 +40,6 @@ public class GuestController {
         model.addAttribute("title", "Регистрация пользователя");
         model.addAttribute("title2", "Новый пользователь");
         model.addAttribute("email_err", emailError);
-        model.addAttribute("passwords_diff", passwordsDiffrent);
         return "user-edit";
     }
 
@@ -50,9 +48,8 @@ public class GuestController {
         String email = user.getEmail();
         User userFromDb = userService.getUserByEmail(email);
         emailError = userFromDb != null;
-        passwordsDiffrent = !user.getPassword().equals(user.getPasswordConf());
         this.user = user;
-        if (emailError || passwordsDiffrent) {
+        if (emailError) {
             return "redirect:/guest/show-repeat-add-user";
         } else {
             user.setRoles(Role.getSetOfRoles(1));
