@@ -11,12 +11,8 @@
 <body>
 <div style="padding-top: 100px; text-align: center">
     <form method="post" th:action="@{/perform-login}">
-        <div th:if="${param.error}" class="alert alert-error" style="color: red">
-            Пользователь с такой комбинацией имя-пароль не найден
-        </div>
-        <div th:if="${param.logout}" class="alert alert-success">
-            You have been logged out.
-        </div>
+        <div th:if="${param.error}" style="color: red">Пользователь с такой комбинацией имя-пароль не найден</div>
+        <div th:if="${param.logout}">You have been logged out.</div>
         <p>
             <label for="username">Ваш е-мэйл:</label>
             <input type="text" id="username" name="username" placeholder="email" size="25" required autofocus>
