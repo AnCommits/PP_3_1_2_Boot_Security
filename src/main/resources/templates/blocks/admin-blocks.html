@@ -54,9 +54,8 @@
                 </span>
             </form>
         </td>
-        <!--        <td th:style="${st} + ' text-align: center'" th:text="${user.isBlocked()} ? 'да' : 'нет'"></td>-->
         <td style="border: 0; padding: 0 2px; text-align: center">
-            <a th:attr="href='admin/show-edit-user?id=' + ${user.id}" class="button">Редактировать</a>
+            <a th:attr="href='/admin/show-edit-user?id=' + ${user.id}" class="button">Редактировать</a>
         </td>
         <td style="border: 0; padding: 0 2px; text-align: center">
             <form th:action="'admin/remove-user/' + ${user.id}" th:method="delete" th:switch="${user.isAdmin()}">
@@ -67,32 +66,6 @@
     </tr>
     </tbody>
 </table>
-<!--------------------------------------------------------------------------------->
-<!--<table th:fragment="admin_edit" style="border: none; margin: auto">-->
-<!--    <thead>-->
-<!--    <tr>-->
-<!--        <th style="padding: 0 5px; text-align: center"><label for="first_name">Имя</label></th>-->
-<!--        <th style="padding: 0 5px; text-align: center"><label for="last_name">Фамилия</label></th>-->
-<!--        <th style="padding: 0 5px; text-align: center"><label for="email">Е-мэйл*</label></th>-->
-<!--        <th style="padding: 0 5px; text-align: center"><label for="password">Пароль*</label></th>-->
-<!--        <th style="padding: 0 5px; text-align: center"><label for="birth_date">Дата рождения</label></th>-->
-<!--        <th style="padding: 0 5px; text-align: center"><label for="blocked">Блокировать</label></th>-->
-<!--        <th></th>-->
-<!--    </tr>-->
-<!--    </thead>-->
-<!--    <tbody>-->
-<!--    <tr style="border: 0">-->
-<!--        <td><input id="first_name" type="text" size="15" th:field="*{firstName}"></td>-->
-<!--        <td><input id="last_name" type="text" size="20" th:field="*{lastName}"></td>-->
-<!--        <td><input id="email" type="text" size="25" required th:field="*{email}"></td>-->
-<!--        <td><input id="password" type="password" size="25" required th:field="*{password}"></td>-->
-<!--        <td><input id="birth_date" type="date" th:field="*{birthDate}"></td>-->
-<!--        <td style="text-align: center"><input id="blocked" type="checkbox" class="checkbox"-->
-<!--                                              th:field="*{blocked}">-->
-<!--        </td>-->
-<!--    </tr>-->
-<!--    </tbody>-->
-<!--</table>-->
 <!--------------------------------------------------------------------------------->
 <header th:fragment="admin_edit_user_header">
     <table style="width:100%; background-color: #e7fff3">

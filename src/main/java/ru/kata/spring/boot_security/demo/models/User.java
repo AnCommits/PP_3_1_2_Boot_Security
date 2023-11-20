@@ -35,8 +35,10 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
-    transient private String passwordConf;
+    @Transient
+//    @Column(nullable = false)
+//    transient private String passwordConf;
+    private String passwordConf;
 
     @Column(name = "birth_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -65,6 +67,17 @@ public class User {
         this.roles = roles;
         this.blocked = blocked;
     }
+
+//    public User(User user) {
+//        this.firstName = user.getFirstName();
+//        this.lastName = user.getLastName();
+//        this.email = user.getEmail();
+//        this.password = user.getPassword();
+//        this.passwordConf = user.getPasswordConf();
+//        this.birthDate = user.getBirthDate();
+//        this.roles = user.getRoles();
+//        this.blocked = user.isBlocked();
+//    }
 
     public boolean isAdmin() {
         return roles.stream().anyMatch(r -> r.getRolesType() == Role.RolesType.ADMIN);

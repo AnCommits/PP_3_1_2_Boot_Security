@@ -25,9 +25,9 @@ public class InitDataBase {
     @PostConstruct
     public void initSuperAdmin() {
         if (userService.countUsers() == 0) {
-            Set<Role> superAdminRoles = Role.getSetOfRoles(2);
+            Set<Role> adminRoles = Role.getSetOfRoles(2);
             User superAdmin = new User(null, null, "superadmin@kata.ru", "123",
-                    null, superAdminRoles, false);
+                    null, adminRoles, false);
             userService.saveUser(superAdmin);
         }
 

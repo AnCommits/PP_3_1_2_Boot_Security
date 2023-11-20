@@ -9,10 +9,20 @@
     <title th:text="${title}"></title>
 </head>
 <body>
-<header th:replace="~{blocks/user-blocks :: user_header}"></header>
+<header>
+    <table style="width:100%; background-color: #e7fff3">
+        <tbody>
+        <tr>
+            <td style="text-align: center; font-weight: bold; font-size: larger; width: 100%; border: 1px solid"
+                th:text="Регистрация">
+            </td>
+            <td><a class="button" href="/">Главная</a></td>
+        </tr>
+        </tbody>
+    </table>
+</header>
 <main>
-<!--    <form th:action="@{save-user}" th:object="${user}" method="post">-->
-    <form action="save-user" th:object="${user}" method="post">
+    <form action="register-user" th:object="${user}" method="post">
         <table th:replace="~{blocks/user-blocks :: edit_user_table}"></table>
         <input type="text" hidden="hidden" th:field="${user.id}">
         <input type="checkbox" hidden="hidden" th:field="${user.blocked}">

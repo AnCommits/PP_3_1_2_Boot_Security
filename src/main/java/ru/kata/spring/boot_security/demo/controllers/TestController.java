@@ -14,13 +14,8 @@ public class TestController {
         this.userService = userService;
     }
 
-    @GetMapping("test")
-    public String test(ModelMap model) {
-        User u1 = userService.getUserById(1L);
-        String e1 = u1.getEmail();
-        User u2 = userService.getUserByEmail("qwerty");
-        System.out.println(u2);
-        model.addAttribute("test", u2.getEmail());
+    @GetMapping("/test/t")
+    public String test() {
         return "test";
     }
 }

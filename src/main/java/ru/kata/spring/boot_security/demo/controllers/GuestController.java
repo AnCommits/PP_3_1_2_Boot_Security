@@ -2,14 +2,17 @@ package ru.kata.spring.boot_security.demo.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 @Controller
-@RequestMapping("/user")
-public class UserControllers {
+@RequestMapping("/guest")
+public class GuestController {
 
     // Как передать объект между контроллерами? @ModelAttribute не работает.
 
@@ -20,31 +23,23 @@ public class UserControllers {
 
     private final UserService userService;
 
-    public UserControllers(UserService userService) {
+    public GuestController(UserService userService) {
         this.userService = userService;
     }
 
-    @GetMapping
-    public String showUser(ModelMap model) {
-        User user = userService.getUserById(2L);
-        model.addAttribute("title", "Моя страница");
-        model.addAttribute("user", user);
-        return "user";
-    }
-
-    @GetMapping("/show-edit-user")
-    public String showEditUser(@RequestParam long id, ModelMap model) {
-        model.addAttribute("user", userService.getUserById(id));
-        model.addAttribute("title", "Моя страница");
-        model.addAttribute("title2", "Редактирование моих данных");
+    @GetMapping("register")
+    public String showAddUser(ModelMap model) {
+        model.addAttribute("user", new User());
+        model.addAttribute("title", "Регистрация пользователя");
+        model.addAttribute("title2", "Новый пользователь");
         return "user-edit";
     }
 
-    @GetMapping("/show-repeat-edit-user")
-    public String showRepeatEditUser(ModelMap model) {
+    @GetMapping("/show-repeat-add-user")
+    public String showRepeatAddUser(ModelMap model) {
         model.addAttribute("user", this.user);
-        model.addAttribute("title", "Моя страница");
-        model.addAttribute("title2", "Редактирование моих данных");
+        model.addAttribute("title", "Регистрация пользователя");
+        model.addAttribute("title2", "Новый пользователь");
         model.addAttribute("email_err", emailError);
         model.addAttribute("passwords_diff", passwordsDiffrent);
         return "user-edit";
@@ -52,17 +47,17 @@ public class UserControllers {
 
     @PostMapping("/save-user")
     public String saveUser(@ModelAttribute("user") User user, ModelMap model) {
-        long id = user.getId();
         String email = user.getEmail();
         User userFromDb = userService.getUserByEmail(email);
-        emailError = userFromDb != null && id != userFromDb.getId();
+        emailError = userFromDb != null;
         passwordsDiffrent = !user.getPassword().equals(user.getPasswordConf());
         this.user = user;
         if (emailError || passwordsDiffrent) {
-            return "redirect:/user/show-repeat-edit-user";
+            return "redirect:/guest/show-repeat-add-user";
+        } else {
+            user.setRoles(Role.getSetOfRoles(1));
+            userService.saveUser(user);
         }
-        user.setRoles(Role.getSetOfRoles(1));
-        userService.updateUser(user);
         return "redirect:/user";
     }
 }

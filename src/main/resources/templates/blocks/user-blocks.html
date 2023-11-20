@@ -25,11 +25,12 @@
     <tbody>
     <tr>
         <td>
-            <table style="margin: auto; padding-top: 40px">
+            <table style="margin: auto; padding-top: 16px">
                 <tbody>
                 <tr th:if="${email_err}">
                     <td colspan="3" style="color: red; text-align: center"
-                        th:text="${user.email} + ' уже зарегистрирован. Используйте другой е-мэйл.'"></td>
+                        th:text="${user.email} + ' уже зарегистрирован. Используйте другой е-мэйл.'">
+                    </td>
                 </tr>
                 <tr>
                     <td style="padding: 0 5px; text-align: center"><label for="first_name">Имя</label></td>
@@ -46,7 +47,7 @@
             <table style="margin: auto; padding-top: 4px">
                 <tbody>
                 <tr th:if="${passwords_diff}">
-                    <td colspan="2" style="color: red; text-align: center">Пароли различаются</td>
+                    <td colspan="2" style="color: red; text-align: center">Пароли не совпадают</td>
                     <td></td>
                 </tr>
                 <tr>
