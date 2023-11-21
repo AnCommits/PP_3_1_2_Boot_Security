@@ -93,7 +93,7 @@ public class AdminControllers {
     }
 
     // Что возвращать из метода, чтобы страница не перезагружалась?
-    @PostMapping("/change-ban/{id}")
+    @PutMapping("/change-ban/{id}")
     public String changeUserBan(@PathVariable long id) {
         User user = userService.getUserById(id);
         user.setLocked(!user.isLocked());

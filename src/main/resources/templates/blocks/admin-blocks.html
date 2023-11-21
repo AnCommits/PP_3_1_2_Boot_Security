@@ -42,7 +42,7 @@
             th:text="${user.birthDate != null} ? ${user.birthDateToString()} : '-'"></td>
         <td th:style="${st} + ' text-align: center'" th:text="${user.recordDateTimeToString()}"></td>
         <td style="text-align: center">
-            <form th:action="'admin/change-ban/' + ${user.id}" th:method="post" th:switch="${user.isAdmin()}">
+            <form th:action="'admin/change-ban/' + ${user.id}" th:method="put" th:switch="${user.isAdmin()}">
                 <span th:case="false">
                     <input type="checkbox" class="checkbox" onclick="submit()" th:if="${!user.isLocked()}">
                     <input type="checkbox" class="checkbox" onclick="submit()" checked th:if="${user.isLocked()}">

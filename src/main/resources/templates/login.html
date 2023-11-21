@@ -9,7 +9,7 @@
 </head>
 <body>
 <div style="padding-top: 100px; text-align: center">
-    <form method="post" th:action="login">
+    <form th:action="login" method="post">
         <div th:if="${param.error}" style="color: red">Пользователь с такой комбинацией имя-пароль не найден</div>
         <div th:if="${param.logout}">You have been logged out.</div>
         <p>Вход</p>

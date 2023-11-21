@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 @EnableWebSecurity
@@ -25,15 +24,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-//                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/guest/sign-up").not().authenticated()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/user/**").hasAnyRole("ADMIN", "USER")
                 .antMatchers("/test/**").authenticated()
                 .antMatchers("/").permitAll()
-                .and().formLogin().loginPage("/login").permitAll()
-//                .defaultSuccessUrl("/")
+                .and().formLogin().permitAll()
+                    .loginPage("/login")
+                .defaultSuccessUrl("/")
                 .and().logout().permitAll();
 //                .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "POST"))
 //                .invalidateHttpSession(true)
@@ -61,20 +60,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new InMemoryUserDetailsManager(user, admin);
     }
 }
-
-//    @Bean
-//    public UserDetailsService users() {
-//        UserDetails user = User.builder()
-//                .username("u")
-//                .password("u")
-//                .roles("USER").build();
-//
-//        UserDetails admin = User.builder()
-//                .username("a")
-//                .password("a")
-//                .roles("ADMIN", "USER").build();
-//        return new InMemoryUserDetailsManager(user, admin);
-//    }
 
 //    @Override
 //    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
