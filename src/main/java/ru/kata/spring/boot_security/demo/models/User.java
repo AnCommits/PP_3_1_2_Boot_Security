@@ -3,22 +3,27 @@ package ru.kata.spring.boot_security.demo.models;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @RequiredArgsConstructor
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;   //                              long id
 
     @Column(name = "first_name")
     private String firstName;
@@ -88,5 +93,38 @@ public class User {
                 ", email='" + email + '\'' +
                 ", roles=" + roles +
                 '}';
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles.stream()
+                //                   "ROLE_" + r.getRolesType().name() ?
+                .map(r -> new SimpleGrantedAuthority(r.getRolesType().name()))
+                .collect((Collectors.toList()));
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return !locked;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

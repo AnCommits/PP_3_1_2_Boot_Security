@@ -16,9 +16,11 @@
             <td style="text-align: center; font-weight: bold; font-size: larger; width: 100%; border: 1px solid">
                 Главная страница
             </td>
-            <td><a class="button" href="/login">Войти</a></td>
-            <td><a class="button" href="/guest/sign-up">Зарегистрироваться</a></td>
-            <td style="text-align: right">
+            <span sec:authorize="isAnonymous()">
+                <td><a class="button" href="/login">Войти</a></td>
+                <td><a class="button" href="/guest/sign-up">Зарегистрироваться</a></td>
+            </span>
+            <td sec:authorize="isAuthenticated()" style="text-align: right">
                 <a href="/logout" class="button">Выйти</a>
             </td>
         </tr>

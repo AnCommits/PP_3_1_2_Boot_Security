@@ -1,4 +1,4 @@
-<header th:fragment="user_header">
+<header th:fragment="user_header" xmlns:sec="http://www.w3.org/1999/xhtml">
     <table style="width:100%; background-color: #e7fff3">
         <tbody>
         <tr>
@@ -6,14 +6,16 @@
                 th:text="${title}">
             </td>
             <td><a class="button" href="/">Главная</a></td>
-            <td>
-                <form th:action="'user/remove-user/' + ${user.id}" th:method="delete">
-                    <button type="submit" class="button">Удалить&nbsp;аккаунт</button>
-                </form>
-            </td>
-            <td style="text-align: right">
-                <a href="/logout" class="button">Выйти</a>
-            </td>
+            <span sec:authorize="isAuthenticated()">
+                <td sec:authorize="!hasRole('ADMIN')">
+                    <form th:action="'user/remove-user/' + ${user.id}" th:method="delete">
+                        <button type="submit" class="button">Удалить&nbsp;аккаунт</button>
+                    </form>
+                </td>
+                <td style="text-align: right">
+                    <a href="/logout" class="button">Выйти</a>
+                </td>
+            </span>
         </tr>
         </tbody>
     </table>
