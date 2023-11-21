@@ -7,6 +7,8 @@ import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
+import java.security.Principal;
+
 @Controller
 @RequestMapping("/user")
 public class UserControllers {
@@ -20,7 +22,8 @@ public class UserControllers {
     }
 
     @GetMapping
-    public String showUser(ModelMap model) {
+    public String showUser(ModelMap model, Principal principal) {
+        String n = principal.getName();
         User user = userService.getUserById(2L);
         model.addAttribute("title", "Моя страница");
         model.addAttribute("user", user);

@@ -26,7 +26,7 @@ public class InitDataBase {
     public void initSuperAdmin() {
         if (userService.countUsers() == 0) {
             Set<Role> adminRoles = Role.getSetOfRoles(2);
-            User superAdmin = new User(null, null, "superadmin@kata.ru", "123",
+            User superAdmin = new User(null, null, "1", "1",
                     null, adminRoles, false);
             userService.saveUser(superAdmin);
             putInitUsers();
@@ -40,9 +40,9 @@ public class InitDataBase {
         Set<Role> userRoleSet1 = Role.getSetOfRoles(1);
         Set<Role> userRoleSet2 = Role.getSetOfRoles(1);
 
-        User user1 = new User("Альберт", "Эйнштейн", "einstein@gmail.com", "123",
+        User user1 = new User("Альберт", "Эйнштейн", "2", "2",
                 new GregorianCalendar(1879, Calendar.MARCH, 14), userRoleSet1, false);
-        User user2 = new User("Мария", "Кюри", "curie@gmail.com", "123",
+        User user2 = new User("Мария", "Кюри", "3", "3",
                 new GregorianCalendar(1867, Calendar.NOVEMBER, 7), userRoleSet2, true);
 
         userService.saveUser(user1);

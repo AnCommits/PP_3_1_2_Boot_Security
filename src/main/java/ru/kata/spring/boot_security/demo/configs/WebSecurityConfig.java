@@ -1,7 +1,6 @@
 package ru.kata.spring.boot_security.demo.configs;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -16,9 +15,11 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserService userService;
+    private final SuccessUserHandler successUserHandler;
 
-    public WebSecurityConfig(UserService userService) {
+    public WebSecurityConfig(UserService userService, SuccessUserHandler successUserHandler) {
         this.userService = userService;
+        this.successUserHandler = successUserHandler;
     }
 
     @Override
@@ -32,7 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/").permitAll()
                 .and().formLogin().permitAll()
                     .loginPage("/login")
-                .defaultSuccessUrl("/")
+                .successHandler(successUserHandler)
                 .and().logout().permitAll();
 //                .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "POST"))
 //                .invalidateHttpSession(true)
@@ -47,18 +48,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //        return new BCryptPasswordEncoder(10);
     }
 
-    @Bean
-    public UserDetailsService users() {
-        UserDetails user = User.builder()
-                .username("u")
-                .password("u")
-                .roles("USER").build();
-        UserDetails admin = User.builder()
-                .username("a")
-                .password("a")
-                .roles("ADMIN", "USER").build();
-        return new InMemoryUserDetailsManager(user, admin);
-    }
+//    @Bean
+//    public UserDetailsService users() {
+//        UserDetails user = User.builder()
+//                .username("u")
+//                .password("u")
+//                .roles("USER").build();
+//        UserDetails admin = User.builder()
+//                .username("a")
+//                .password("a")
+//                .roles("ADMIN", "USER").build();
+//        return new InMemoryUserDetailsManager(user, admin);
+//    }
 }
 
 //    @Override

@@ -13,7 +13,7 @@ import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
-public class UserServiceImp implements UserService /*, UserDetailsService*/ {
+public class UserServiceImp implements UserService, UserDetailsService {
 
     private final UserDao userDao;
 
@@ -66,7 +66,7 @@ public class UserServiceImp implements UserService /*, UserDetailsService*/ {
         return userDao.countUsers();
     }
 
-//    @Override
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = getUserByEmail(username);
         if (user == null) {

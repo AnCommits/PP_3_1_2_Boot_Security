@@ -15,6 +15,10 @@ public class Controllers {
 
     @GetMapping("/test")
     public String test(Principal principal) {
+        if (principal != null) {
+            String n = principal.getName();
+            System.out.println("test page ---------- username: " + n);
+        }
         return "test";
     }
 }
