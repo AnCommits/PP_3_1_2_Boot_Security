@@ -31,18 +31,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/user/**").hasAnyRole("ADMIN", "USER")
                 .antMatchers("/test/**").authenticated()
-                .antMatchers("/**").permitAll()
-                .and().formLogin().permitAll()
-                    .loginPage("/login")
-                .successHandler(successUserHandler)
-                .and().logout().permitAll();
-
-
-//                .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "POST"))
-//                .invalidateHttpSession(true)
-//                .clearAuthentication(true)
-//                .deleteCookies("JSESSIONID")
-//                .logoutSuccessUrl("/");
+                .antMatchers("/**").permitAll();
+        http
+                .formLogin().loginPage("/login").permitAll()
+                .successHandler(successUserHandler);
+        http
+                .logout()
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .deleteCookies("JSESSIONID")
+                .logoutSuccessUrl("/");
     }
 
     @Bean
