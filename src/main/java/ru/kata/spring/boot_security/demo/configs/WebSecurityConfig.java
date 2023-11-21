@@ -25,16 +25,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/guest/sign-up").not().authenticated()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/user/**").hasAnyRole("ADMIN", "USER")
                 .antMatchers("/test/**").authenticated()
-                .antMatchers("/").permitAll()
+                .antMatchers("/**").permitAll()
                 .and().formLogin().permitAll()
                     .loginPage("/login")
                 .successHandler(successUserHandler)
                 .and().logout().permitAll();
+
+
 //                .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "POST"))
 //                .invalidateHttpSession(true)
 //                .clearAuthentication(true)
@@ -48,18 +51,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //        return new BCryptPasswordEncoder(10);
     }
 
-//    @Bean
-//    public UserDetailsService users() {
-//        UserDetails user = User.builder()
-//                .username("u")
-//                .password("u")
-//                .roles("USER").build();
-//        UserDetails admin = User.builder()
-//                .username("a")
-//                .password("a")
-//                .roles("ADMIN", "USER").build();
-//        return new InMemoryUserDetailsManager(user, admin);
-//    }
+    @Bean
+    public UserDetailsService users() {
+        UserDetails user = User.builder()
+                .username("u")
+                .password("u")
+                .roles("USER").build();
+        UserDetails admin = User.builder()
+                .username("a")
+                .password("a")
+                .roles("ADMIN", "USER").build();
+        return new InMemoryUserDetailsManager(user, admin);
+    }
 }
 
 //    @Override

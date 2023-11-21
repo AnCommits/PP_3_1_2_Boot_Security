@@ -18,6 +18,8 @@ public class Controllers {
         if (principal != null) {
             String n = principal.getName();
             System.out.println("test page ---------- username: " + n);
+        } else {
+            System.out.println("test page ---------- no username");
         }
         return "test";
     }

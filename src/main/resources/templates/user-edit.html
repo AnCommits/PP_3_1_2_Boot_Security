@@ -12,7 +12,7 @@
 <header th:replace="~{blocks/user-blocks :: user_header}"></header>
 <main>
     <h2 style="text-align: center" th:text="${title2}"></h2>
-    <form action="save-user" th:object="${user}" method="post">
+    <form action="save-user" th:object="${user}" th:method="${user.id == 0} ? 'post' : 'put'">
         <table th:replace="~{blocks/user-blocks :: edit_user_table}"></table>
         <input type="text" hidden="hidden" th:field="${user.id}">
         <input type="checkbox" hidden="hidden" th:field="${user.locked}">

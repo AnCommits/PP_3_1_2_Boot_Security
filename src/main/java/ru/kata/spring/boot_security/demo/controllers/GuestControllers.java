@@ -13,7 +13,7 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 @Controller
 @RequestMapping("/guest")
 public class GuestControllers {
-    private User user;
+    private User userToRepeatEdit;
     private boolean emailError;
 
     private final UserService userService;
@@ -32,25 +32,24 @@ public class GuestControllers {
 
     @GetMapping("/show-repeat-add-user")
     public String showRepeatAddUser(ModelMap model) {
-        model.addAttribute("user", this.user);
+        model.addAttribute("user", userToRepeatEdit);
+        model.addAttribute("email_err", emailError);
         model.addAttribute("title", "Регистрация пользователя");
         model.addAttribute("title2", "Новый пользователь");
-        model.addAttribute("email_err", emailError);
         return "user-edit";
     }
 
     @PostMapping("/save-user")
-    public String saveUser(@ModelAttribute("user") User user, ModelMap model) {
-        String email = user.getEmail();
-        User userFromDb = userService.getUserByEmail(email);
+    public String saveUser(@ModelAttribute("user") User user) {
+        String emailFromForm = user.getEmail();
+        User userFromDb = userService.getUserByEmail(emailFromForm);
         emailError = userFromDb != null;
-        this.user = user;
         if (emailError) {
+            userToRepeatEdit = user;
             return "redirect:/guest/show-repeat-add-user";
-        } else {
-            user.setRoles(Role.getSetOfRoles(1));
-            userService.saveUser(user);
         }
+        user.setRoles(Role.getSetOfRoles(1));
+        userService.saveUser(user);
         return "redirect:/user";
     }
 }

@@ -12,7 +12,7 @@ import java.security.Principal;
 @Controller
 @RequestMapping("/user")
 public class UserControllers {
-    private User user;
+    private User userToRepeatEdit;
     private boolean emailError;
 
     private final UserService userService;
@@ -23,7 +23,7 @@ public class UserControllers {
 
     @GetMapping
     public String showUser(ModelMap model, Principal principal) {
-        String n = principal.getName();
+//        String n = principal.getName();
         User user = userService.getUserById(2L);
         model.addAttribute("title", "Моя страница");
         model.addAttribute("user", user);
@@ -40,21 +40,21 @@ public class UserControllers {
 
     @GetMapping("/show-repeat-edit-user")
     public String showRepeatEditUser(ModelMap model) {
-        model.addAttribute("user", this.user);
+        model.addAttribute("user", userToRepeatEdit);
+        model.addAttribute("email_err", emailError);
         model.addAttribute("title", "Моя страница");
         model.addAttribute("title2", "Редактирование моих данных");
-        model.addAttribute("email_err", emailError);
         return "user-edit";
     }
 
-    @PostMapping("/save-user")
-    public String saveUser(@ModelAttribute("user") User user, ModelMap model) {
-        long id = user.getId();
-        String email = user.getEmail();
-        User userFromDb = userService.getUserByEmail(email);
-        emailError = userFromDb != null && id != userFromDb.getId();
-        this.user = user;
+    @PutMapping("/save-user")
+    public String updateUser(@ModelAttribute("user") User user) {
+        long idFromForm = user.getId();
+        String emailFromForm = user.getEmail();
+        User userFromDb = userService.getUserByEmail(emailFromForm);
+        emailError = userFromDb != null && idFromForm != userFromDb.getId();
         if (emailError) {
+            userToRepeatEdit = user;
             return "redirect:/user/show-repeat-edit-user";
         }
         user.setRoles(Role.getSetOfRoles(1));

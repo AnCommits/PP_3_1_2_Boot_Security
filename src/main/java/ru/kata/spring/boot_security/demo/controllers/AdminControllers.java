@@ -13,7 +13,7 @@ import java.util.Set;
 @Controller
 @RequestMapping("/admin")
 public class AdminControllers {
-    private User user;
+    private User userToRepeatEdit;
     private Set<Role> roles;
     private boolean emailError;
 
@@ -43,11 +43,26 @@ public class AdminControllers {
 
     @GetMapping("/show-repeat-edit-user")
     public String showRepeatEditUser(ModelMap model) {
-        model.addAttribute("user", this.user);
+        model.addAttribute("user", userToRepeatEdit);
+        model.addAttribute("email_err", emailError);
         model.addAttribute("title", "Страница администратора");
         model.addAttribute("title2", "Редактирование пользователя");
-        model.addAttribute("email_err", emailError);
         return "user-edit";
+    }
+
+    @PutMapping("/save-user")
+    public String updateUser(@ModelAttribute("user") User user) {
+        long idFromForm = user.getId();
+        String emailFromForm = user.getEmail();
+        User userFromDb = userService.getUserByEmail(emailFromForm);
+        emailError = userFromDb != null && idFromForm != userFromDb.getId();
+        if (emailError) {
+            userToRepeatEdit = user;
+            return "redirect:/admin/show-repeat-edit-user";
+        }
+        user.setRoles(roles);
+        userService.updateUser(user);
+        return "redirect:/admin";
     }
 
     @GetMapping("/show-add-user")
@@ -60,35 +75,24 @@ public class AdminControllers {
 
     @GetMapping("/show-repeat-add-user")
     public String showRepeatAddUser(ModelMap model) {
-        model.addAttribute("user", this.user);
+        model.addAttribute("user", userToRepeatEdit);
+        model.addAttribute("email_err", emailError);
         model.addAttribute("title", "Страница администратора");
         model.addAttribute("title2", "Новый пользователь");
-        model.addAttribute("email_err", emailError);
         return "user-edit";
     }
 
     @PostMapping("/save-user")
-    public String saveUser(@ModelAttribute("user") User user, ModelMap model) {
-        long id = user.getId();
-        String email = user.getEmail();
-        User userFromDb = userService.getUserByEmail(email);
-        emailError = userFromDb != null && id != userFromDb.getId();
-        this.user = user;
-        if (id == 0) {      // new user
-            if (emailError) {
-                return "redirect:/admin/show-repeat-add-user";
-            } else {
-                user.setRoles(roles);
-                userService.saveUser(user);
-            }
-        } else {            // edit user
-            if (emailError) {
-                return "redirect:/admin/show-repeat-edit-user";
-            } else {
-                user.setRoles(roles);
-                userService.updateUser(user);
-            }
+    public String saveUser(@ModelAttribute("user") User user) {
+        String emailFromForm = user.getEmail();
+        User userFromDb = userService.getUserByEmail(emailFromForm);
+        emailError = userFromDb != null;
+        if (emailError) {
+            userToRepeatEdit = user;
+            return "redirect:/admin/show-repeat-add-user";
         }
+        user.setRoles(Role.getSetOfRoles(1));
+        userService.saveUser(user);
         return "redirect:/admin";
     }
 
