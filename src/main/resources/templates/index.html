@@ -17,12 +17,13 @@
                 Главная страница
             </td>
             <span sec:authorize="isAnonymous()">
-                <td><a class="button" href="/login">Войти</a></td>
-                <td><a class="button" href="/guest/sign-up">Зарегистрироваться</a></td>
+                <td><a href="/login" class="button">Войти</a></td>
+                <td><a href="/guest/sign-up" class="button">Зарегистрироваться</a></td>
             </span>
-            <td sec:authorize="isAuthenticated()" style="text-align: right">
-                <a href="/logout" class="button">Выйти</a>
-            </td>
+            <span sec:authorize="isAuthenticated()">
+                <td><a href="/user" class="button">Моя&nbsp;страница</a></td>
+                <td><a href="/logout" class="button">Выйти</a></td>
+            </span>
         </tr>
         </tbody>
     </table>

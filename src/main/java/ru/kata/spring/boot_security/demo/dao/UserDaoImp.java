@@ -40,9 +40,7 @@ public class UserDaoImp implements UserDao {
     @Override
     public User getUserByEmail(String email) {
         logger.info("getUserByEmail " + email);
-//        String hql = "SELECT u FROM User u left join fetch u.roles WHERE u.email =:email";
-//        String hql = "SELECT u FROM User u join fetch u.roles WHERE u.email =:email";
-        String hql = "SELECT u FROM User u WHERE u.email =:email";
+        String hql = "SELECT u FROM User u join fetch u.roles WHERE u.email =:email";
         TypedQuery<User> query = entityManager.createQuery(hql, User.class);
         query.setParameter("email", email);
         User user = null;

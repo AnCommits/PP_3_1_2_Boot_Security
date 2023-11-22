@@ -38,8 +38,10 @@ public class Role implements GrantedAuthority {
      * Roles must go from lowest to highest
      */
     public enum RolesType {
-        USER,
-        ADMIN
+        USER,           // todo can read
+//        SUPER_USER,     //      + can write
+        ADMIN          //
+//        SUPER_ADMIN     //      controls admins
     }
 
     public static Set<Role> getSetOfRoles(int numberOfSets) {
