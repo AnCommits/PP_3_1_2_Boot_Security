@@ -35,32 +35,46 @@
         <td th:style="${st}" th:text="${user.firstName != null} ? ${user.firstName} : '-'"></td>
         <td th:style="${st}" th:text="${user.lastName != null} ? ${user.lastName} : '-'"></td>
         <td th:style="${st}" th:text="${user.email}"></td>
-        <td th:style="${st}" th:with="roles=${user.roles}">
-            <span th:text="${user.getMainRole()}"></span>
-        </td>
+        <td th:style="${st}" th:text="${user.getMainRole()}"></td>
         <td th:style="${st} + ' text-align: center'"
             th:text="${user.birthDate != null} ? ${user.birthDateToString()} : '-'"></td>
         <td th:style="${st} + ' text-align: center'" th:text="${user.recordDateTimeToString()}"></td>
         <td style="text-align: center">
-            <form th:action="'admin/change-ban/' + ${user.id}" th:method="put"
-                  th:switch="${user.getMainRole() == 'admin'}">
+            <form th:action="'admin/change-ban/' + ${user.id}" th:method="put" th:switch="${user.isLocked()}">
+                <input th:case="true" type="checkbox" class="checkbox" onclick="submit()" checked>
                 <span th:case="false">
-                    <input type="checkbox" class="checkbox" onclick="submit()" th:if="${!user.isLocked()}">
-                    <input type="checkbox" class="checkbox" onclick="submit()" checked th:if="${user.isLocked()}">
-                </span>
-                <span th:case="true">
-                    <input type="checkbox" disabled="disabled">
-                </span>
+                        <span sec:authorize="hasAuthority('SUPER_ADMIN')">
+                            <span th:switch="${user.hasRole('SUPER_ADMIN')}">
+                                <input th:case="true" type="checkbox" disabled="disabled">
+                                <input th:case="false" type="checkbox" class="checkbox" onclick="submit()">
+                            </span>
+                        </span>
+                        <span sec:authorize="!hasAuthority('SUPER_ADMIN')">
+                            <span th:switch="${user.hasRole('ADMIN')}">
+                                <input th:case="true" type="checkbox" disabled="disabled">
+                                <input th:case="false" type="checkbox" class="checkbox" onclick="submit()">
+                            </span>
+                        </span>
+                    </span>
             </form>
         </td>
         <td style="border: 0; padding: 0 2px; text-align: center">
             <a th:attr="href='/admin/show-edit-user?id=' + ${user.id}" class="button">Редактировать</a>
         </td>
         <td style="border: 0; padding: 0 2px; text-align: center">
-            <form th:action="'admin/remove-user/' + ${user.id}" th:method="delete"
-                  th:switch="${user.getMainRole() == 'admin'}">
-                <button type="submit" class="button" th:case="false">Удалить</button>
-                <button type="submit" disabled="disabled" th:case="true">Удалить</button>
+            <form th:action="'admin/remove-user/' + ${user.id}" th:method="delete">
+                        <span sec:authorize="hasAuthority('SUPER_ADMIN')">
+                            <span th:switch="${user.hasRole('SUPER_ADMIN')}">
+                                <button type="submit" disabled="disabled" th:case="true">Удалить</button>
+                                <button type="submit" class="button" th:case="false">Удалить</button>
+                            </span>
+                        </span>
+                <span sec:authorize="!hasAuthority('SUPER_ADMIN')">
+                            <span th:switch="${user.hasRole('ADMIN')}">
+                                <button type="submit" disabled="disabled" th:case="true">Удалить</button>
+                                <button type="submit" class="button" th:case="false">Удалить</button>
+                            </span>
+                        </span>
             </form>
         </td>
     </tr>

@@ -26,31 +26,44 @@ public class InitDataBase {
      * Method creates and puts in the table an admin in case there are no entries in the table.
      */
     @PostConstruct
-    public void initSuperAdmin() {
+    public void initUsers() {
         if (userService.countUsers() == 0) {
-            Set<Role> adminRoles = Role.getSetOfRoles(2);
-            User superAdmin = new User(null, null,
-                    "1", passwordEncoder.encode("1"),
-                    null, adminRoles, false);
-            userService.saveUser(superAdmin);
-            putInitUsers();
+            initSuperAdmin();
+            initAdmin();
+            initSuperUser();
+            initUser();
         }
     }
 
-    /**
-     * Method puts a few users in the table for testing the application.
-     */
-    public void putInitUsers() {
-        Set<Role> userRoleSet1 = Role.getSetOfRoles(1);
-        User user1 = new User("Альберт", "Эйнштейн",
-                "2",  passwordEncoder.encode("2"),
-                new GregorianCalendar(1879, Calendar.MARCH, 14), userRoleSet1, false);
-        userService.saveUser(user1);
+    public void initSuperAdmin() {
+        Set<Role> roles = Role.getSetOfRoles(4);
+        User user = new User(null, null,
+                "1", passwordEncoder.encode("1"),
+                null, roles, false);
+        userService.saveUser(user);
+    }
 
-        Set<Role> userRoleSet2 = Role.getSetOfRoles(1);
-        User user2 = new User("Мария", "Кюри",
-                "3",  passwordEncoder.encode("3"),
-                new GregorianCalendar(1867, Calendar.NOVEMBER, 7), userRoleSet2, true);
-        userService.saveUser(user2);
+    public void initAdmin() {
+        Set<Role> roles = Role.getSetOfRoles(3);
+        User user = new User(null, null,
+                "2", passwordEncoder.encode("2"),
+                null, roles, false);
+        userService.saveUser(user);
+    }
+
+    public void initSuperUser() {
+        Set<Role> roles = Role.getSetOfRoles(2);
+        User user = new User("Альберт", "Эйнштейн",
+                "3", passwordEncoder.encode("3"),
+                new GregorianCalendar(1879, Calendar.MARCH, 14), roles, false);
+        userService.saveUser(user);
+    }
+
+    public void initUser() {
+        Set<Role> roles = Role.getSetOfRoles(1);
+        User user = new User("Мария", "Кюри",
+                "4", passwordEncoder.encode("4"),
+                new GregorianCalendar(1867, Calendar.NOVEMBER, 7), roles, false);
+        userService.saveUser(user);
     }
 }

@@ -6,16 +6,15 @@
                 th:text="${title}">
             </td>
             <td><a class="button" href="/">Главная</a></td>
-            <span sec:authorize="isAuthenticated()">
-                <td sec:authorize="!hasRole('ADMIN')">
-                    <form th:action="'user/remove-user/' + ${user.id}" th:method="delete">
-                        <button type="submit" class="button">Удалить&nbsp;аккаунт</button>
-                    </form>
-                </td>
-                <td style="text-align: right">
-                    <a href="/logout" class="button">Выйти</a>
-                </td>
-            </span>
+            <td sec:authorize="hasAuthority('ADMIN')">
+                <a href="/admin" class="button">Страница&nbsp;администратора</a>
+            </td>
+            <td sec:authorize="!hasAuthority('SUPER_ADMIN')">
+                <form th:action="'user/remove-user/' + ${user.id}" th:method="delete">
+                    <button type="submit" class="button">Удалить&nbsp;аккаунт</button>
+                </form>
+            </td>
+            <td><a href="/logout" class="button">Выйти</a></td>
         </tr>
         </tbody>
     </table>
@@ -52,7 +51,8 @@
                     <td style="padding: 0 5px; text-align: center"><label for="birth_date">Дата рождения</label></td>
                 </tr>
                 <tr>
-                    <td><input id="password" type="password" minlength="2" size="24" required th:field="${user.password}"></td>
+                    <td><input id="password" type="password" minlength="2" size="24" required
+                               th:field="${user.password}"></td>
                     <td><input id="pass_c" type="password" size="24" disabled="disabled"></td>
                     <td><input id="birth_date" type="date" th:field="${user.birthDate}"></td>
                 </tr>

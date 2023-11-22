@@ -39,15 +39,15 @@ public class Role implements GrantedAuthority {
      */
     public enum RolesType {
         USER,           // todo can read
-//        SUPER_USER,     //      + can write
-        ADMIN          //
-//        SUPER_ADMIN     //      controls admins
+        SUPER_USER,     //      + can write
+        ADMIN,          //
+        SUPER_ADMIN     //      controls admins
     }
 
-    public static Set<Role> getSetOfRoles(int numberOfSets) {
+    public static Set<Role> getSetOfRoles(int numberOfRoles) {
         RolesType[] allRolesType = RolesType.values();
         Set<Role> roles = new HashSet<>();
-        IntStream.range(0, numberOfSets).mapToObj(n -> new Role(allRolesType[n])).forEach(roles::add);
+        IntStream.range(0, numberOfRoles).mapToObj(n -> new Role(allRolesType[n])).forEach(roles::add);
         return roles;
     }
 

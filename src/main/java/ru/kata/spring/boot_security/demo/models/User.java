@@ -63,6 +63,10 @@ public class User implements UserDetails {
         this.locked = locked;
     }
 
+    public boolean hasRole(String role) {
+        return roles.stream().anyMatch(r -> r.getRolesType().name().equals(role));
+    }
+
     public String getMainRole() {
         Role.RolesType[] allRolesType = Role.RolesType.values();
         return roles.stream()
