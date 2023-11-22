@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -13,13 +14,15 @@ import java.util.Set;
 @Controller
 @RequestMapping("/admin")
 public class AdminControllers {
+    private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
+
     private User userToRepeatEdit;
     private Set<Role> roles;
     private boolean emailError;
 
-    private final UserService userService;
-
-    public AdminControllers(UserService userService) {
+    public AdminControllers(PasswordEncoder passwordEncoder, UserService userService) {
+        this.passwordEncoder = passwordEncoder;
         this.userService = userService;
     }
 
@@ -61,6 +64,7 @@ public class AdminControllers {
             return "redirect:/admin/show-repeat-edit-user";
         }
         user.setRoles(roles);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.updateUser(user);
         return "redirect:/admin";
     }
@@ -92,22 +96,24 @@ public class AdminControllers {
             return "redirect:/admin/show-repeat-add-user";
         }
         user.setRoles(Role.getSetOfRoles(1));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.saveUser(user);
         return "redirect:/admin";
     }
 
-    // Что возвращать из метода, чтобы страница не перезагружалась?
-    @PutMapping("/change-ban/{id}")
+        @PutMapping("/change-ban/{id}")
     public String changeUserBan(@PathVariable long id) {
         User user = userService.getUserById(id);
         user.setLocked(!user.isLocked());
         userService.updateUser(user);
-        return "redirect:/admin";
+        return "redirect:/admin"; // Что возвращать из метода, чтобы страница не перезагружалась?
     }
 
     @DeleteMapping("/remove-user/{id}")
     public String removeUser(@PathVariable long id) {
         userService.removeUserById(id);
+        userToRepeatEdit = null;
+        roles = null;
         return "redirect:/admin";
     }
 }

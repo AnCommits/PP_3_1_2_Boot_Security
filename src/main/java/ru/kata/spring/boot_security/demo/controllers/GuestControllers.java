@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,12 +14,14 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 @Controller
 @RequestMapping("/guest")
 public class GuestControllers {
+    private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
+
     private User userToRepeatEdit;
     private boolean emailError;
 
-    private final UserService userService;
-
-    public GuestControllers(UserService userService) {
+    public GuestControllers(PasswordEncoder passwordEncoder, UserService userService) {
+        this.passwordEncoder = passwordEncoder;
         this.userService = userService;
     }
 
@@ -49,7 +52,8 @@ public class GuestControllers {
             return "redirect:/guest/show-repeat-add-user";
         }
         user.setRoles(Role.getSetOfRoles(1));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.saveUser(user);
-        return "redirect:/user";
+        return "redirect:/";
     }
 }

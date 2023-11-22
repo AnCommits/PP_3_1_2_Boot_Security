@@ -1,5 +1,7 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -12,19 +14,21 @@ import java.security.Principal;
 @Controller
 @RequestMapping("/user")
 public class UserControllers {
+    private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
+
     private User userToRepeatEdit;
     private boolean emailError;
 
-    private final UserService userService;
-
-    public UserControllers(UserService userService) {
+    public UserControllers(PasswordEncoder passwordEncoder, UserService userService) {
+        this.passwordEncoder = passwordEncoder;
         this.userService = userService;
     }
 
     @GetMapping
-    public String showUser(ModelMap model, Principal principal) {
-//        String n = principal.getName();
-        User user = userService.getUserById(2L);
+    public String showUser(ModelMap model, Authentication authentication) {
+        long id = ((User) authentication.getPrincipal()).getId();
+        User user = userService.getUserById(id);
         model.addAttribute("title", "Моя страница");
         model.addAttribute("user", user);
         return "user";
@@ -48,7 +52,7 @@ public class UserControllers {
     }
 
     @PutMapping("/save-user")
-    public String updateUser(@ModelAttribute("user") User user) {
+    public String updateUser(@ModelAttribute("user") User user, Principal principal) {
         long idFromForm = user.getId();
         String emailFromForm = user.getEmail();
         User userFromDb = userService.getUserByEmail(emailFromForm);
@@ -58,6 +62,7 @@ public class UserControllers {
             return "redirect:/user/show-repeat-edit-user";
         }
         user.setRoles(Role.getSetOfRoles(1));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.updateUser(user);
         return "redirect:/user";
     }
@@ -65,6 +70,7 @@ public class UserControllers {
     @DeleteMapping("/remove-user/{id}")
     public String removeUser(@PathVariable long id) {
         userService.removeUserById(id);
-        return "redirect:/";
+        userToRepeatEdit = null;
+        return "redirect:/logout";
     }
 }
