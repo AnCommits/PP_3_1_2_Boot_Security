@@ -9,11 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Data
 @RequiredArgsConstructor
@@ -48,11 +44,10 @@ public class User implements UserDetails {
     @Temporal(TemporalType.TIMESTAMP)
     private Date recordDateTime;
 
-    //    @ManyToMany(cascade = {CascadeType.ALL})
-//    @OneToMany(cascade = {CascadeType.ALL})
-    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
-//    @JoinTable
-    @JoinColumn
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
     private boolean locked;
@@ -68,8 +63,12 @@ public class User implements UserDetails {
         this.locked = locked;
     }
 
-    public boolean isAdmin() {
-        return roles.stream().anyMatch(r -> r.getRolesType() == Role.RolesType.ADMIN);
+    public String getMainRole() {
+        Role.RolesType[] allRolesType = Role.RolesType.values();
+        return roles.stream()
+                .max((r1, r2) -> r1.getRolesType().ordinal() - r2.getRolesType().ordinal())
+                .map(Role::getRolesType)
+                .orElse(allRolesType[0]).name().toLowerCase();
     }
 
     public String birthDateToString() {
@@ -86,21 +85,19 @@ public class User implements UserDetails {
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", roles=" + roles +
-                '}';
+        return "User{" + id + ' ' + firstName + ' ' + lastName + ' ' + email + '}';
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(email);
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
-                //                   "ROLE_" + r.getRolesType().name() ?
                 .map(r -> new SimpleGrantedAuthority(r.getRolesType().name()))
-                .collect((Collectors.toList()));
+                .toList();
     }
 
     @Override

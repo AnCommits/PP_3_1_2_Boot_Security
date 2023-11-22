@@ -6,7 +6,9 @@ import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 @Data
 @RequiredArgsConstructor
@@ -20,13 +22,11 @@ public class Role implements GrantedAuthority {
 
     private RolesType rolesType;
 
-    //    @ManyToMany(mappedBy = "roles")
-//    private Set<User> users;
-    @ManyToOne
-    private User user;
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "roles")
+    private Set<User> user;
 
-    public Role(RolesType rolesTypes) {
-        this.rolesType = rolesTypes;
+    public Role(RolesType rolesType) {
+        this.rolesType = rolesType;
     }
 
     @Override
@@ -34,18 +34,23 @@ public class Role implements GrantedAuthority {
         return rolesType.name();
     }
 
+    /**
+     * Roles must go from lowest to highest
+     */
     public enum RolesType {
-        ADMIN,
-        USER
+        USER,
+        ADMIN
     }
 
-    public static Set<Role> getSetOfRoles(int set) {
-        return switch (set) {
-            case 1 -> Set.of(new Role(Role.RolesType.USER));
-            case 2 -> Set.of(
-                    new Role(Role.RolesType.ADMIN),
-                    new Role(Role.RolesType.USER));
-            default -> new HashSet<>();
-        };
+    public static Set<Role> getSetOfRoles(int numberOfSets) {
+        RolesType[] allRolesType = RolesType.values();
+        Set<Role> roles = new HashSet<>();
+        IntStream.range(0, numberOfSets).mapToObj(n -> new Role(allRolesType[n])).forEach(roles::add);
+        return roles;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(rolesType);
     }
 }

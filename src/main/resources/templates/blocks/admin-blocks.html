@@ -36,13 +36,14 @@
         <td th:style="${st}" th:text="${user.lastName != null} ? ${user.lastName} : '-'"></td>
         <td th:style="${st}" th:text="${user.email}"></td>
         <td th:style="${st}" th:with="roles=${user.roles}">
-            <span th:text="${user.isAdmin()} ? 'администратор' : 'пользователь'"></span>
+            <span th:text="${user.getMainRole()}"></span>
         </td>
         <td th:style="${st} + ' text-align: center'"
             th:text="${user.birthDate != null} ? ${user.birthDateToString()} : '-'"></td>
         <td th:style="${st} + ' text-align: center'" th:text="${user.recordDateTimeToString()}"></td>
         <td style="text-align: center">
-            <form th:action="'admin/change-ban/' + ${user.id}" th:method="put" th:switch="${user.isAdmin()}">
+            <form th:action="'admin/change-ban/' + ${user.id}" th:method="put"
+                  th:switch="${user.getMainRole() == 'admin'}">
                 <span th:case="false">
                     <input type="checkbox" class="checkbox" onclick="submit()" th:if="${!user.isLocked()}">
                     <input type="checkbox" class="checkbox" onclick="submit()" checked th:if="${user.isLocked()}">
@@ -56,7 +57,8 @@
             <a th:attr="href='/admin/show-edit-user?id=' + ${user.id}" class="button">Редактировать</a>
         </td>
         <td style="border: 0; padding: 0 2px; text-align: center">
-            <form th:action="'admin/remove-user/' + ${user.id}" th:method="delete" th:switch="${user.isAdmin()}">
+            <form th:action="'admin/remove-user/' + ${user.id}" th:method="delete"
+                  th:switch="${user.getMainRole() == 'admin'}">
                 <button type="submit" class="button" th:case="false">Удалить</button>
                 <button type="submit" disabled="disabled" th:case="true">Удалить</button>
             </form>

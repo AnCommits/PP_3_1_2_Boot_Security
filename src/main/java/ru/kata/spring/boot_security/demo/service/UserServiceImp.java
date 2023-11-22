@@ -23,7 +23,6 @@ public class UserServiceImp implements UserService /*, UserDetailsService*/ {
 
     @Transactional
     @Override
-    //                    boolean ?
     public void saveUser(User user) {
         if (user != null) {
             user.setRecordDateTime(new Date());

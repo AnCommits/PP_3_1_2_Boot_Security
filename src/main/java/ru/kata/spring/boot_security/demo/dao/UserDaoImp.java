@@ -19,19 +19,19 @@ public class UserDaoImp implements UserDao {
 
     @Override
     public void saveUser(User user) {
-        logger.info(user.toString());
+        logger.info("saveUser " + user.toString());
         entityManager.persist(user);
     }
 
     @Override
     public User getUserById(Long id) {
-        logger.info("id: " + id);
+        logger.info("getUserById " + id);
         return entityManager.find(User.class, id);
     }
 
     @Override
     public List<User> getAllUsers() {
-        logger.info("");
+        logger.info("getAllUsers");
         String hql = "FROM User";
         TypedQuery<User> query = entityManager.createQuery(hql, User.class);
         return query.getResultList();
@@ -39,7 +39,7 @@ public class UserDaoImp implements UserDao {
 
     @Override
     public User getUserByEmail(String email) {
-        logger.info(email);
+        logger.info("getUserByEmail " + email);
 //        String hql = "SELECT u FROM User u left join fetch u.roles WHERE u.email =:email";
 //        String hql = "SELECT u FROM User u join fetch u.roles WHERE u.email =:email";
         String hql = "SELECT u FROM User u WHERE u.email =:email";
@@ -49,28 +49,27 @@ public class UserDaoImp implements UserDao {
         try {
             user = query.getSingleResult();
         } catch (Exception e) {
-            logger.warning("getUserByEmail: " + e.getMessage() + " " + email);
+            logger.info("getUserByEmail: " + e.getMessage() + " " + email);
         }
         return user;
     }
 
     @Override
     public void updateUser(User user) {
-        logger.info(user.toString());
+        logger.info("updateUser " + user);
         entityManager.merge(user);
     }
 
     @Override
     public void removeUserById(Long id) {
-        logger.info("id: " + id);
+        logger.info("removeUserById " + id);
         User user = entityManager.find(User.class, id);
         entityManager.remove(user);
     }
 
     @Override
     public long countUsers() {
-        logger.info("");
-        logger.info("");
+        logger.info("countUsers");
         String hql = "SELECT count(u) FROM User u";
         TypedQuery<Long> query = entityManager.createQuery(hql, Long.class);
         return query.getSingleResult();
