@@ -59,14 +59,17 @@
 </head>
 <body>
 
-<form action="/te2" method="post" th:object="${user}" > // user вместо ${user} ?
-    <ul>
-        <li th:each="role : ${roles}">
-            <div>
-                <input type="checkbox" th:field="*{}">
-            </div>
+<!--user вместо ${user} ?-->
+<form action="/test2" method="post">
+    <ul th:each="role : ${roles}">
+        <li>
+                <input type="checkbox" th:name="${role.name}" th:value="true">
+                <label th:text="${role.name.toLowerCase()} + '-' + ${role.id}"></label>
         </li>
     </ul>
+    <div>
+        <button type="submit" class="button">Ok</button>
+    </div>
 </form>
 
 </body>

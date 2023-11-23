@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -53,7 +52,7 @@ public class User implements UserDetails {
     private boolean locked;
 
     public User(String firstName, String lastName, String email, String password,
-                Calendar birthDate, Set<Role> roles, boolean locked) {
+                Calendar birthDate, LinkedHashSet<Role> roles, boolean locked) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -68,7 +67,8 @@ public class User implements UserDetails {
     }
 
     public String getMainRole() {
-        return roles.stream().max(Role.roleComparator).orElse(new Role("USER")).getName();
+        Optional<Role> last = roles.stream().reduce((x, y) -> y);
+        return last.isPresent() ? last.get().getName() : Role.rolesTypes[0].name();
     }
 
     public String birthDateToString() {
