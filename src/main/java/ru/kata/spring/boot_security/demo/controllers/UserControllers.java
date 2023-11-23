@@ -28,6 +28,8 @@ public class UserControllers {
     @GetMapping
     public String showUser(ModelMap model, Authentication authentication) {
         long id = ((User) authentication.getPrincipal()).getId();
+        // After user changes his/her email the email in authentication
+        // is not the same as the email in DB
         User user = userService.getUserById(id);
         model.addAttribute("title", "Моя страница");
         model.addAttribute("user", user);

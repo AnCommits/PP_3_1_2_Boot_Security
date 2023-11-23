@@ -64,16 +64,43 @@ public class User implements UserDetails {
     }
 
     public boolean hasRole(String role) {
-        return roles.stream().anyMatch(r -> r.getRolesType().name().equals(role));
+//        return roles.stream().anyMatch(r -> r.getRolesType().name().equals(role));
+        return roles.stream().anyMatch(r -> r.getName().equals(role));
     }
 
+//    class N implements Comparator<Role> {
+//        @Override
+//        public int compare(Role o1, Role o2) {
+//            return Role.RolesType.valueOf(o1.getName()).ordinal() - Role.RolesType.valueOf(o2.getName()).ordinal();
+//        }
+//    }
+
     public String getMainRole() {
-        Role.RolesType[] allRolesType = Role.RolesType.values();
-        return roles.stream()
-                .max((r1, r2) -> r1.getRolesType().ordinal() - r2.getRolesType().ordinal())
-                .map(Role::getRolesType)
-                .orElse(allRolesType[0]).name().toLowerCase();
+//        Role mainRole = roles.stream()
+//                .max((r1, r2) -> (new N()).compare(r1, r2))
+//                .orElse(new Role("0"));
+//                return mainRole.getName();
+//        Role.RolesType[] allRolesType = Role.RolesType.values();
+        Role mainRole = new Role("USER");
+        for (Role role : roles) {
+            if (Role.RolesType.valueOf(role.getName()).ordinal() > Role.RolesType.valueOf(mainRole.getName()).ordinal()) {
+                mainRole = role;
+            }
+        }
+        return mainRole.getName();
+//        return roles.stream()
+////                .max((r1, r2) -> r1.getRolesType().ordinal() - r2.getRolesType().ordinal())
+////                .map(Role::getRolesType)
+////                .orElse(allRolesType[0]).name().toLowerCase();
+//                .max((r1, r2) -> Role.RolesType.valueOf(r1.getName()).ordinal() -
+//                        .getRolesType().ordinal() - r2.getRolesType().ordinal())
+//                .map(Role::getRolesType)
+//                .orElse(allRolesType[0]).name().toLowerCase();
     }
+
+//    public List<String> roles() {
+//        return roles.stream().map(r -> r.getRolesType().name().toLowerCase()).toList();
+//    }
 
     public String birthDateToString() {
         return birthDate != null
@@ -100,7 +127,8 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
-                .map(r -> new SimpleGrantedAuthority(r.getRolesType().name()))
+//                .map(r -> new SimpleGrantedAuthority(r.getRolesType().name()))
+                .map(r -> new SimpleGrantedAuthority(r.getName()))
                 .toList();
     }
 
