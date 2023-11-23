@@ -8,8 +8,8 @@ import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/admin")
@@ -18,7 +18,7 @@ public class AdminControllers {
     private final UserService userService;
 
     private User userToRepeatEdit;
-    private Set<Role> roles;
+    private LinkedHashSet<Role> roles;
     private boolean emailError;
 
     public AdminControllers(PasswordEncoder passwordEncoder, UserService userService) {

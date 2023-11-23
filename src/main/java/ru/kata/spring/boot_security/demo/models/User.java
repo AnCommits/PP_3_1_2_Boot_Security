@@ -62,6 +62,14 @@ public class User implements UserDetails {
         this.locked = locked;
     }
 
+    public LinkedHashSet<Role> getRoles() {
+        return (LinkedHashSet<Role>)roles;
+    }
+
+    public void setRoles(LinkedHashSet<Role> roles) {
+        this.roles = roles;
+    }
+
     public boolean hasRole(String role) {
         return roles.stream().anyMatch(r -> r.getName().equals(role));
     }

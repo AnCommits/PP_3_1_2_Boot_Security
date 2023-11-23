@@ -24,7 +24,7 @@ public class Role implements GrantedAuthority {
     private Set<User> user;
 
     @Transient
-    final static RolesType[] rolesTypes = RolesType.values();
+    public final static RolesType[] rolesTypes = RolesType.values();
 
     public Role(String name) {
         setName(name);
