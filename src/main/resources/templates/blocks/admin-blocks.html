@@ -35,7 +35,7 @@
         <td th:style="${st}" th:text="${user.firstName != null} ? ${user.firstName} : '-'"></td>
         <td th:style="${st}" th:text="${user.lastName != null} ? ${user.lastName} : '-'"></td>
         <td th:style="${st}" th:text="${user.email}"></td>
-        <td th:style="${st}" th:text="${user.getMainRole()}"></td>
+        <td th:style="${st}" th:text="${user.getMainRole().toLowerCase()}"></td>
         <td th:style="${st} + ' text-align: center'"
             th:text="${user.birthDate != null} ? ${user.birthDateToString()} : '-'"></td>
         <td th:style="${st} + ' text-align: center'" th:text="${user.recordDateTimeToString()}"></td>
