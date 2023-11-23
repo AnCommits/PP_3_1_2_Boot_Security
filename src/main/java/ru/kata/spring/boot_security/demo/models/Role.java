@@ -30,35 +30,37 @@ public class Role implements GrantedAuthority {
         setName(name);
     }
 
+    public void setName(String name) {
+        String nameInUpperCase = name.toUpperCase();
+        boolean correctName = Arrays.stream(rolesTypes)
+                .anyMatch(r -> r.name().equals(nameInUpperCase));
+        this.name = correctName ? nameInUpperCase : rolesTypes[0].name();
+    }
+
     @Override
     public String getAuthority() {
         return name;
     }
 
-    public void setName(String name) {
-        String nameInUpperCase = name.toUpperCase();
-        boolean correctName = Arrays.stream((rolesTypes))
-                .anyMatch(r -> r.name().equals(nameInUpperCase));
-        this.name = correctName ? nameInUpperCase : rolesTypes[0].name();
-    }
-
     /**
-     * Roles must go from the lowest to the highest.
-     * If the role is specified incorrectly in a constructor the first role will be installed.
-     * The last role is considered the highest in the view.
+     * roles preferably start with the lowest,
+     * since if the role is specified incorrectly, the first one is installed
      */
     public enum RolesType {
         USER,           // can read
         SUPER_USER,     // + can update
         ADMIN,          // controls users
-        SUPER_ADMIN;    // + controls admins, can't be removed or locked
+        SUPER_ADMIN     // + controls admins, can't be removed or locked
     }
 
-    public static LinkedHashSet<Role> getSetOfRoles(int numberOfRoles) {
-        LinkedHashSet<Role> roles = new LinkedHashSet<>();
+    public static Set<Role> getSetOfRoles(int numberOfRoles) {
+        Set<Role> roles = new HashSet<>();
         IntStream.range(0, numberOfRoles).mapToObj(n -> new Role(rolesTypes[n].name())).forEach(roles::add);
         return roles;
     }
+
+    public static Comparator<Role> roleComparator =
+            Comparator.comparingInt(r -> RolesType.valueOf(r.getName()).ordinal());
 
     @Override
     public int hashCode() {

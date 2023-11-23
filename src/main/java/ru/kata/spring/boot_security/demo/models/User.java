@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -52,7 +53,7 @@ public class User implements UserDetails {
     private boolean locked;
 
     public User(String firstName, String lastName, String email, String password,
-                Calendar birthDate, LinkedHashSet<Role> roles, boolean locked) {
+                Calendar birthDate, Set<Role> roles, boolean locked) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -62,21 +63,13 @@ public class User implements UserDetails {
         this.locked = locked;
     }
 
-    public LinkedHashSet<Role> getRoles() {
-        return (LinkedHashSet<Role>)roles;
-    }
-
-    public void setRoles(LinkedHashSet<Role> roles) {
-        this.roles = roles;
-    }
-
     public boolean hasRole(String role) {
         return roles.stream().anyMatch(r -> r.getName().equals(role));
     }
 
     public String getMainRole() {
-        Optional<Role> last = roles.stream().reduce((x, y) -> y);
-        return last.isPresent() ? last.get().getName() : Role.rolesTypes[0].name();
+        Optional<Role> mainRoleOptional = roles.stream().max(Role.roleComparator);
+        return mainRoleOptional.isPresent() ? mainRoleOptional.get().getName() : Role.rolesTypes[0].name();
     }
 
     public String birthDateToString() {
